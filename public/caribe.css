@@ -6,7 +6,7 @@
   fill: #F66;
 }
 
-.country.hidden {
+.country.ghost {
   fill: #CCC;
   fill-opacity: 0.2;
 }
@@ -18,11 +18,12 @@
   stroke-linejoin: round;
 }
 
-.coast {
+.ghost-border {
   stroke: #FFF;
   stroke-width: 1;
   fill: none;
   stroke-linejoin: round;
+  stroke-dasharray: 2,2;
 }
 .city {
   stroke: #080;

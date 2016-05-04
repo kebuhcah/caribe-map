@@ -20,7 +20,12 @@
 
     var countries = topojson.feature(caribe, caribe.objects.countries);
 
-		var hiddenCountries = ['COL', 'BRA', 'PRI', 'FRA', 'MEX', 'USA', 'ECU', 'PER'];
+		var hiddenCountries = ['COL', 'BRA', 'PRI', 'FRA', 'MEX',
+		                       'USA', 'ECU', 'PER', 'PAN', 'CRI'];
+
+		function isHiddenCountry(c) {
+			return hiddenCountries.indexOf(c) >= 0;
+		}
 
 		var projection = d3.geo.mercator()
 			.center([-68, 14])
@@ -36,19 +41,22 @@
   		  .enter().append("path")
     			.attr("class", function(d) { return "country " + d.id; })
     			.attr("d", path)
-					.classed("hidden", function(d) { return hiddenCountries.indexOf(d.id) >=0; });
+					.classed("ghost", function(d) { return isHiddenCountry(d.id); });
 
 			svg.append("path")
-				.datum(topojson.mesh(caribe, caribe.objects.countries, function(a, b) { return a !== b; }))
+				.datum(topojson.mesh(caribe, caribe.objects.countries, function(a, b) {
+					return a !== b && !(isHiddenCountry(a.id) && isHiddenCountry(b.id));
+				}))
 				.attr("d", path)
 				.attr("class", "border");
 
 			svg.append("path")
 					.datum(topojson.mesh(caribe, caribe.objects.countries, function(a, b) {
-						return a === b && hiddenCountries.indexOf(a.id) >=0;
+						return a === b && isHiddenCountry(a.id)
+							|| a !== b && isHiddenCountry(a.id) && isHiddenCountry(b.id);
 					}))
 					.attr("d", path)
-					.attr("class", "coast");
+					.attr("class", "ghost-border");
 
 			/*svg.append("path")
 				.datum(topojson.feature(caribe, caribe.objects.cities))
