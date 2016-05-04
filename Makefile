@@ -19,7 +19,9 @@ build/countries.json: build/ne_10m_admin_0_countries.shp
 	                                       'CUB', 'DMA', 'DOM', 'GLP', 'GRD', \
 																				 'GTM', 'GUF', 'GUY', 'HND', 'HTI', \
 																				 'JAM', 'KNA', 'LCA', 'MTQ', 'NIC', \
-																				 'PAN', 'SLV', 'SUR', 'TTO', 'VCT', 'VEN')" $@ $<
+																				 'PAN', 'SLV', 'SUR', 'TTO', 'VCT', \
+																				 'VEN', 'COL', 'BRA', 'USA', 'MEX', \
+																				 'PRI', 'FRA', 'PER', 'ECU')" $@ $<
 
 build/cities.json: build/ne_10m_populated_places.shp
 	ogr2ogr -f GeoJSON -where "ISO_A2 IN ('AG', 'BS', 'BZ', 'BB', 'CR', 'CU', 'DM', \
