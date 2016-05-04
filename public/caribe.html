@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <style>
-	.country { fill: #666}
-	.country.VEN { fill: #F00}
+	.country { fill: #666 }
+	.country.VEN { fill: #F00 }
+
+	.border {
+		stroke: #FFF;
+		fill: none;
+	}
 </style>
 <body>
   <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
@@ -20,7 +25,7 @@
 
 			console.log(caribe);
 
-    	var countries = topojson.feature(caribe, caribe.objects.countries);
+    var countries = topojson.feature(caribe, caribe.objects.countries);
 
 		var projection = d3.geo.mercator()
 			.center([-70, 15])
@@ -32,11 +37,16 @@
     		.projection(projection);
 
     	svg.selectAll(".country")
-    		.data(countries.features)
+    			.data(countries.features)
   		  .enter().append("path")
-    		.attr("class", function(d) { return "country " + d.id; })
-    		.attr("d", path);
-			});
+    			.attr("class", function(d) { return "country " + d.id; })
+    			.attr("d", path);
+
+			svg.append("path")
+				.datum(topojson.mesh(caribe, caribe.objects.countries, function(a, b) { return a !== b; }))
+				.attr("d", path)
+				.attr("class", "border")
+		});
 
     </script>
 </body>
