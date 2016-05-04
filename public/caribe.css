@@ -1,0 +1,29 @@
+.country {
+  fill: #DB8
+}
+
+.country.VEN {
+  fill: #F66;
+}
+
+.border {
+  stroke: #FFF;
+  stroke-width: 1;
+  fill: none;
+  stroke-linejoin: round;
+}
+
+.city {
+  stroke: #080;
+  stroke-width: 2;
+  fill: none;
+}
+
+.country-label {
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.root {
+  stroke-width: 0px;
+  background-color: #CFF;
+}
