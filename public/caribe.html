@@ -20,8 +20,8 @@
 
     var countries = topojson.feature(caribe, caribe.objects.countries);
 
-		var hiddenCountries = ['COL', 'BRA', 'PRI', 'FRA', 'MEX',
-		                       'USA', 'ECU', 'PER', 'PAN', 'CRI'];
+		var hiddenCountries = ['COL', 'BRA', 'PRI', 'FRA', 'MEX', 'BRB',
+		                       'USA', 'ECU', 'PER', 'PAN', 'CRI', 'TTO'];
 
 		function isHiddenCountry(c) {
 			return hiddenCountries.indexOf(c) >= 0;
