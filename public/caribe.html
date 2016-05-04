@@ -5,8 +5,8 @@
   <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
   <script src="//d3js.org/topojson.v1.min.js"></script>
   <script type="text/javascript">
-    var width = 750,
-    height = 550;
+    var width = 900,
+    height = 640;
 
     var svg = d3.select("body").append("svg")
     		.attr("width", width)
@@ -28,9 +28,8 @@
 		}
 
 		var projection = d3.geo.mercator()
-			.center([-68, 14])
-			.rotate([4.4, 0])
-			.scale(1000)
+			.center([-73, 14])
+			.scale(1200)
 			.translate([width / 2, height / 2]);
 
     	var path = d3.geo.path()
