@@ -20,6 +20,8 @@
 
     var countries = topojson.feature(caribe, caribe.objects.countries);
 
+		var hiddenCountries = ['COL', 'BRA', 'PRI', 'FRA', 'MEX', 'USA', 'ECU', 'PER'];
+
 		var projection = d3.geo.mercator()
 			.center([-68, 14])
 			.rotate([4.4, 0])
@@ -33,12 +35,20 @@
     			.data(countries.features)
   		  .enter().append("path")
     			.attr("class", function(d) { return "country " + d.id; })
-    			.attr("d", path);
+    			.attr("d", path)
+					.classed("hidden", function(d) { return hiddenCountries.indexOf(d.id) >=0; });
 
 			svg.append("path")
 				.datum(topojson.mesh(caribe, caribe.objects.countries, function(a, b) { return a !== b; }))
 				.attr("d", path)
 				.attr("class", "border");
+
+			svg.append("path")
+					.datum(topojson.mesh(caribe, caribe.objects.countries, function(a, b) {
+						return a === b && hiddenCountries.indexOf(a.id) >=0;
+					}))
+					.attr("d", path)
+					.attr("class", "coast");
 
 			/*svg.append("path")
 				.datum(topojson.feature(caribe, caribe.objects.cities))
@@ -54,7 +64,7 @@
 					.text(function(d) { return d.properties.name; })
 					.style("text-anchor", function(d) {
 						return ['KNA', 'VCT', 'SLV', 'DMA', 'GRD'].indexOf(d.id) >= 0 ? "end" :
-									['ATG', 'DOM', 'BRB', 'BLZ', 'LCA', 'TTO'].indexOf(d.id) >= 0 ? "start" : "middle";
+									['ATG', 'DOM', 'BRB', 'BLZ', 'LCA', 'TTO', 'PRI'].indexOf(d.id) >= 0 ? "start" : "middle";
 					});
 		});
 

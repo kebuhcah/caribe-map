@@ -6,6 +6,11 @@
   fill: #F66;
 }
 
+.country.hidden {
+  fill: #CCC;
+  fill-opacity: 0.2;
+}
+
 .border {
   stroke: #FFF;
   stroke-width: 1;
@@ -13,6 +18,12 @@
   stroke-linejoin: round;
 }
 
+.coast {
+  stroke: #FFF;
+  stroke-width: 1;
+  fill: none;
+  stroke-linejoin: round;
+}
 .city {
   stroke: #080;
   stroke-width: 2;
