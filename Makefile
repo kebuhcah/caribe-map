@@ -21,7 +21,7 @@ build/countries.json: build/ne_10m_admin_0_countries.shp
 																				 'JAM', 'KNA', 'LCA', 'MTQ', 'NIC', \
 																				 'PAN', 'SLV', 'SUR', 'TTO', 'VCT', 'VEN')" $@ $<
 
-build/cities.json: build/ne_10m_admin_0_countries.shp
+build/cities.json: build/ne_10m_populated_places.shp
 	ogr2ogr -f GeoJSON -where "ISO_A2 IN ('AG', 'BS', 'BZ', 'BB', 'CR', 'CU', 'DM', \
 	                                      'DO', 'GP', 'GD', 'GT', 'GF', 'GY', 'HN', \
 																				'HT', 'JM', 'KN', 'LC', 'MQ', 'NI', 'PA', \
@@ -30,3 +30,6 @@ build/cities.json: build/ne_10m_admin_0_countries.shp
 
 build/caribe.json: build/countries.json build/cities.json
 	topojson -o $@ --id-property ADM0_A3 --properties name=NAME -- $^
+
+public/caribe.json: build/caribe.json
+	cp $< $@

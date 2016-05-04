@@ -8,6 +8,12 @@
 		stroke: #FFF;
 		fill: none;
 	}
+
+	.city {
+		stroke: #0F9;
+		stroke-width: 2;
+		fill: none;
+	}
 </style>
 <body>
   <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
@@ -45,7 +51,12 @@
 			svg.append("path")
 				.datum(topojson.mesh(caribe, caribe.objects.countries, function(a, b) { return a !== b; }))
 				.attr("d", path)
-				.attr("class", "border")
+				.attr("class", "border");
+
+			svg.append("path")
+				.datum(topojson.feature(caribe, caribe.objects.cities))
+				.attr("d", path)
+				.attr("class", "city");
 		});
 
     </script>
