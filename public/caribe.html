@@ -39,30 +39,18 @@
   <script src="lib/topojson.v1.min.js"></script>
   <script src="lib/bootstrap.min.js" charset="utf-8"></script>
   <script type="text/javascript">
-    var width = 900,
-    height = 640;
+    var margin = {top: 0, left: 0, bottom: 0, right: 0}
+      , width = parseInt(d3.select('#map').style('width'))
+      , width = width - margin.left - margin.right
+      , mapRatio = .7
+      , height = width * mapRatio;
 
     var svg = d3.select("#map").append("svg")
     		.attr("width", width)
         .attr("height", height)
 				.attr("class", "root");
-
-  var dsv = d3.dsv(";","text/plain");
-  dsv("caribe-official-data.csv", function(error, data) {
-    if (error) return console.error(error);
-
-    console.log(data);
-  });
-
-	d3.json("caribe.json", function(error, caribe) {
-    	if (error) return console.error(error);
-
-			console.log(caribe);
-
-    var countries = topojson.feature(caribe, caribe.objects.countries);
-
-		var hiddenCountries = ['COL', 'BRA', 'PRI', 'FRA', 'MEX', 'BRB', 'SLV',
-		                       'USA', 'ECU', 'PER', 'PAN', 'CRI', 'TTO'];
+        var hiddenCountries = ['COL', 'BRA', 'PRI', 'FRA', 'MEX', 'BRB', 'SLV',
+    		                       'USA', 'ECU', 'PER', 'PAN', 'CRI', 'TTO'];
 
 		function isHiddenCountry(c) {
 			return hiddenCountries.indexOf(c) >= 0;
@@ -70,11 +58,25 @@
 
 		var projection = d3.geo.mercator()
 			.center([-73, 14])
-			.scale(1200)
+			.scale(width * 4 / 3)
 			.translate([width / 2, height / 2]);
 
-    	var path = d3.geo.path()
-    		.projection(projection);
+  	var path = d3.geo.path()
+  		.projection(projection);
+
+    var dsv = d3.dsv(";","text/plain");
+    dsv("caribe-official-data.csv", function(error, data) {
+      if (error) return console.error(error);
+
+      console.log(data);
+    });
+
+  	d3.json("caribe.json", function(error, caribe) {
+      	if (error) return console.error(error);
+
+  			console.log(caribe);
+
+      var countries = topojson.feature(caribe, caribe.objects.countries);
 
     	svg.selectAll(".country")
     			.data(countries.features)
@@ -118,6 +120,30 @@
 									['ATG', 'DOM', 'BLZ', 'LCA', 'GRD'].indexOf(d.id) >= 0 ? "start" : "middle";
 					});
 		});
+
+    d3.select(window).on('resize', resize);
+
+    function resize() {
+        // adjust things when the window size changes
+        width = parseInt(d3.select('#map').style('width'));
+        width = width - margin.left - margin.right;
+        height = width * mapRatio;
+
+        // update projection
+        projection
+            .translate([width / 2, height / 2])
+            .scale(width);
+
+        // resize the map container
+        var map = d3.select('#map');
+        map
+            .style('width', width + 'px')
+            .style('height', height + 'px');
+
+        // resize the map
+        map.select('.land').attr('d', path);
+        map.selectAll('.state').attr('d', path);
+    }
 
     </script>
 </body>
