@@ -4,6 +4,23 @@
 <link rel="stylesheet" type="text/css" href="lib/bootstrap.min.css"> </link>
 <link rel="stylesheet" type="text/css" href="lib/bootstrap-theme.min.css"> </link>
 <body>
+  <div class="row">
+    <div class="col-md-3">
+      <div class="panel panel-default">
+        <div class="panel-heading">Introduction</div>
+        <div class="panel-body">
+          <b>Petrocaribe</b> is an oil alliance of many Caribbean states with Venezuela to purchase oil on conditions of preferential payment. The alliance was launched on 29 June 2005 in Puerto La Cruz, Venezuela. In 2013 Petrocaribe agreed links with the Bolivarian Alliance for the Americas (ALBA), to go beyond oil and promote economic cooperation.
+        </div>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <div class="panel panel-default">
+        <div class="panel-heading">Petrocaribe Countries</div>
+        <div id="map">
+        </div>
+      </div>
+    </div>
+  </div>
   <script src="lib/d3.v3.min.js" charset="utf-8"></script>
   <script src="lib/topojson.v1.min.js"></script>
   <script src="lib/bootstrap.min.js" charset="utf-8"></script>
@@ -11,7 +28,7 @@
     var width = 900,
     height = 640;
 
-    var svg = d3.select("body").append("svg")
+    var svg = d3.select("#map").append("svg")
     		.attr("width", width)
         .attr("height", height)
 				.attr("class", "root");
