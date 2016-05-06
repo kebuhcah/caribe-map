@@ -71,8 +71,8 @@
         .attr("class", "legend")
         .attr("transform", "translate(" + (width - 75) + "," + 15 + ")")
       .selectAll("g")
-        .data([10,50,150])
-      .enter().append("g")
+        .data([150,50,10])
+      .enter().append("g").attr("class", function(d){ return "legend-circle-" + d; });
 
     legend.append("circle")
         .attr("cy", radius)
@@ -81,6 +81,20 @@
         .attr("y", function(d) { return 2 * radius(d) - 20; })
         .attr("dy", "1.3em")
         .text(d3.format("d"));
+
+    var legend150 = svg.selectAll(".legend-circle-150");
+    legend150.append("text")
+        .attr("dy", "1.3em")
+        .attr("y", function(d) { return -20; })
+        .attr("class", "consumption-label")
+        .style("text-anchor","middle")
+        .text("Total Consumption");
+    legend150.append("text")
+        .attr("y", function(d) { return 2 * radius(d) - 5; })
+        .attr("dy", "1.3em")
+        .attr("class", "quota-label")
+        .style("text-anchor","middle")
+        .text("Petrocaribe Quota");
 
   	d3.json("caribe.json", function(error, caribe) {
       if (error) return console.error(error);
@@ -146,23 +160,29 @@
         .attr("transform", function(d) {
            return "translate(" + (path.centroid(d)[0])
               + "," + (path.centroid(d)[1] - (radius(d.properties.consumptionKbd) || 0)
-              - (d.id !== 'VEN' ? 6 : 12)) + ")";
+              - (['BLZ', 'VEN'].indexOf(d.id) < 0 ? 8 : 12)) + ")";
          })
         .attr("dy", ".35em")
         .attr("font-size", 12)
         .attr("class", function(d){ return "consumption-label " + d.id; })
-        .style("text-anchor", "end")
+        .style("text-anchor", function(d) {
+          return ['DOM', 'VEN', 'GUY', 'SUR', 'JAM'].indexOf(d.id) >= 0 ? "middle" :
+                 ['HND', 'NIC'].indexOf(d.id) >= 0 ? "start" : "end";
+        })
         .text(function(d) { return d.properties.consumptionKbd + " KB/D"; });
       bubble.append("text")
         .attr("transform", function(d) {
            return "translate(" + (path.centroid(d)[0])
               + "," + (path.centroid(d)[1] + ((radius(d.properties.quotaKbd))||0)
-              + (d.id !== 'GUY' ? 6 : 12)) + ")";
+              + (d.id !== 'GUY' ? 8 : 12)) + ")";
          })
         .attr("dy", ".35em")
         .attr("font-size", 12)
         .attr("class", function(d){ return "quota-label " + d.id; })
-        .style("text-anchor", "start")
+        .style("text-anchor", function(d) {
+          return ['DOM', 'SUR'].indexOf(d.id) >= 0 ? "middle" :
+                 ['GTM', 'CUB', 'JAM', 'HTI', 'GUY'].indexOf(d.id) < 0 ? "start" : "end";
+        })
         .text(function(d) { return  d.properties.quotaKbd > 0 ? d.properties.quotaKbd + " KB/D" : ""; });
 
 
@@ -237,10 +257,12 @@
 
     function mouseover(d,i) {
       d3.selectAll("."+d.point.id).classed("highlighted",true);
+      d3.selectAll(".legend text").classed("highlighted",true);
     }
 
     function mouseout(d,i) {
       d3.selectAll("."+d.point.id).classed("highlighted",false);
+      d3.selectAll(".legend text").classed("highlighted",false);
     }
 
     function touchstart(d,i) {
