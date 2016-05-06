@@ -129,13 +129,12 @@
         //Initiate a group element to place the voronoi diagram in
         var voronoiGroup = svg.append("g")
           .attr("class", "voronoiWrapper");
-        console.log(countries.features);
         voronoiGroup.selectAll("path")
             .data(voronoi(countries.features.filter(function(d) {
               return !isHiddenCountry(d.id);
             }))) //Use vononoi() with your dataset inside
           .enter().append("path")
-            .attr("d", function(d, i) { console.log(d);return "M" + d.join("L") + "Z"; })
+            .attr("d", function(d, i) { return "M" + d.join("L") + "Z"; })
           .attr("class", function(d,i) { return "voronoi " + d.id; }) //Give each cell a unique class where the unique part corresponds to the circle classes
             //.style("stroke", "#2074A0") //I use this to look at how the cells are dispersed as a check
             .style("fill", "none")
@@ -180,7 +179,7 @@
                   .data(voronoi(countries.features.filter(function(d) {
                     return !isHiddenCountry(d.id);
                   })))
-                  .attr("d", function(d, i) { console.log(d);return "M" + d.join("L") + "Z"; });
+                  .attr("d", function(d, i) { return "M" + d.join("L") + "Z"; });
 
         }
 		});
