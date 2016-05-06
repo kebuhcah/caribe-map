@@ -43,9 +43,29 @@
 .country-label {
 }
 
+.consumption-label {
+  visibility: hidden;
+}
+
+.quota-label {
+  visibility: hidden;
+}
+
+.consumption-label.highlighted {
+  visibility: visible;
+  fill: #00f;
+  font-weight: bold;
+}
+
+.quota-label.highlighted {
+  visibility: visible;
+  fill: #f66;
+  font-weight: bold;
+}
+
 .root {
   stroke-width: 0px;
-  background-color: #CFF;
+  background-color: #cff;
 }
 
 .quota {
@@ -63,10 +83,10 @@
 .quota.highlighted {
   fill-opacity: .8;
   stroke: none;
-  fill: #ffd700;
+  fill: #f66;
 }
 
 .consumption.highlighted {
-  stroke: #ffd700;
+  stroke: #00f;
   stroke-width: 3px;
 }

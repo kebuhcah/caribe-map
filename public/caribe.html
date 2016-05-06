@@ -23,7 +23,7 @@
     </div>
     <div class="col-md-8">
       <div class="panel panel-default">
-        <div class="panel-heading">Petrocaribe Countries</div>
+        <div class="panel-heading">Interactive Map</div>
         <div id="map">
         </div>
       </div>
@@ -100,31 +100,56 @@
         .attr("class", "bubble")
       .selectAll("circle")
         .data(countries.features
-          .sort(function(a, b) { return b.properties.quotaKbd - a.properties.quotaKbd; }))
+          .sort(function(a, b) { return b.properties.quotaKbd - a.properties.quotaKbd; })
+          .filter(function(d) { return !isHiddenCountry(d.id); }))
       .enter();
       bubble.append("circle")
         .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; })
-        .attr("r", function(d) { return radius(d.properties.quotaKbd); })
+        .attr("r", function(d) { return radius(d.properties.quotaKbd) || 0; })
         .attr("class", function(d){ return "quota " + d.id; });
       bubble.append("circle")
         .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; })
-        .attr("r", function(d) { return radius(d.properties.consumptionKbd); })
+        .attr("r", function(d) { return radius(d.properties.consumptionKbd) || 0; })
         .attr("class", function(d){ return "consumption " + d.id; });
 
-  		svg.selectAll(".country-label")
-  				.data(countries.features.filter(function(d) {
+      svg.selectAll(".country-label")
+          .data(countries.features.filter(function(d) {
             return !isHiddenCountry(d.id);
           }))
-			.enter().append("text")
-				.attr("class", function(d) { return "country-label " + d.id; })
-				.attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; })
-				.attr("dy", ".35em")
+      .enter().append("text")
+        .attr("class", function(d) { return "country-label " + d.id; })
+        .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; })
+        .attr("dy", ".35em")
         .attr("font-size", 12)
-				.text(function(d) { return d.properties.name; })
-				.style("text-anchor", function(d) {
-					return ['KNA', 'VCT', 'DMA'].indexOf(d.id) >= 0 ? "end" :
-								['ATG', 'DOM', 'BLZ', 'LCA', 'GRD'].indexOf(d.id) >= 0 ? "start" : "middle";
-				});
+        .text(function(d) { return d.properties.name; })
+        .style("text-anchor", function(d) {
+          return ['KNA', 'VCT', 'DMA'].indexOf(d.id) >= 0 ? "end" :
+                ['ATG', 'DOM', 'BLZ', 'LCA', 'GRD'].indexOf(d.id) >= 0 ? "start" : "middle";
+        });
+
+      bubble.append("text")
+        .attr("transform", function(d) {
+           return "translate(" + (path.centroid(d)[0] - (radius(d.properties.consumptionKbd) || 0)/1.4 - 5)
+              + "," + (path.centroid(d)[1] - (radius(d.properties.consumptionKbd) || 0)/1.4 - 5) + ")";
+         })
+        .attr("dy", ".35em")
+        .attr("font-size", 12)
+        .attr("class", function(d){ return "consumption-label " + d.id; })
+        .style("text-anchor", "end")
+        .text(function(d) { return d.properties.consumptionKbd + " KBD"; });
+      bubble.append("text")
+        .attr("transform", function(d) {
+           return "translate(" + (path.centroid(d)[0] + ((radius(d.properties.quotaKbd)/1.4)||5) + 5)
+              + "," + (path.centroid(d)[1] + ((radius(d.properties.quotaKbd)/1.4)||5) + 5) + ")";
+         })
+        .attr("dy", ".35em")
+        .attr("font-size", 12)
+        .attr("class", function(d){ return "quota-label " + d.id; })
+        .style("text-anchor", "start")
+        .text(function(d) { return  d.properties.quotaKbd > 0 ? d.properties.quotaKbd + " KBD" : ""; });
+
+
+
 
         //Initiate a group element to place the voronoi diagram in
         var voronoiGroup = svg.append("g")
