@@ -3,7 +3,11 @@
 }
 
 .country.VEN {
-  fill: #F66;
+  fill: #f66;
+}
+
+.country.VEN.highlighted {
+  fill: #f66;
 }
 
 .country.highlighted {
