@@ -143,7 +143,7 @@
             .style("pointer-events", "all")
             .on("mouseover", mouseover)
             .on("mouseout", mouseout)
-            .on("click", click);
+            .on("touchstart", touchstart);
 
         d3.select(window).on('resize', resize);
 
@@ -193,8 +193,9 @@
       d3.selectAll("."+d.point.id).classed("highlighted",false);
     }
 
-    function click(d,i) {
-      mouseout(d,i);
+    function touchstart(d,i) {
+      d3.selectAll(".highlighted").classed("highlighted",false);
+      mouseover(d,i);
     }
 
     //////////////////////////////////////////////////////////////
