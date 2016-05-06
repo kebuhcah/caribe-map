@@ -38,3 +38,15 @@
   stroke-width: 0px;
   background-color: #CFF;
 }
+
+.quota {
+  fill-opacity: .5;
+  stroke: #000;
+  stroke-width: .5px;
+}
+
+.consumption {
+  fill: none;
+  stroke: #000;
+  stroke-width: 1px;
+}
