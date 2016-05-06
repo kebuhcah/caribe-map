@@ -30,9 +30,11 @@ build/cities.json: build/ne_10m_populated_places.shp
 																				'SV', 'SR', 'TT', 'VC', 'VE') \
 																				AND FEATURECLA = 'Admin-0 Capital'" $@ $<
 
-build/caribe.json: build/countries.json build/cities.json
+build/caribe.json: build/countries.json
 	topojson -o $@ --id-property 'ADM0_A3,country' \
 	--external-properties localdata/caribe_official.tsv \
+	--properties quotaKbd=+quotaKbd \
+	--properties consumptionKbd=+consumptionKbd \
 	--properties name=NAME_LONG -- $^
 
 public/caribe.json: build/caribe.json
