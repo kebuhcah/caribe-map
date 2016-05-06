@@ -90,3 +90,14 @@
   stroke: #00f;
   stroke-width: 3px;
 }
+
+.legend circle {
+  fill: none;
+  stroke: #ccc;
+  stroke-width: 1px;
+}
+
+.legend text {
+  fill: #777;
+  text-anchor: middle;
+}
