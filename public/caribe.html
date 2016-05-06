@@ -14,7 +14,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand" href="#">Petrocaribe: A Tragicomedy of Errors</a>
+        <a class="navbar-brand" href="#">Petrocaribe: A Comedy of Errors</a>
       </div>
     </div>
   </nav>
@@ -64,17 +64,10 @@
   	var path = d3.geo.path()
   		.projection(projection);
 
-    var dsv = d3.dsv(";","text/plain");
-    dsv("caribe-official-data.csv", function(error, data) {
+  	d3.json("caribe.json", function(error, caribe) {
       if (error) return console.error(error);
 
-      console.log(data);
-    });
-
-  	d3.json("caribe.json", function(error, caribe) {
-      	if (error) return console.error(error);
-
-  			console.log(caribe);
+  		console.log(caribe);
 
       var countries = topojson.feature(caribe, caribe.objects.countries);
 
@@ -132,17 +125,20 @@
         // update projection
         projection
             .translate([width / 2, height / 2])
-            .scale(width);
+            .scale(width * 4 / 3);
 
         // resize the map container
-        var map = d3.select('#map');
+        var map = d3.select('#map svg');
         map
-            .style('width', width + 'px')
-            .style('height', height + 'px');
+            .attr('width', width)
+            .attr('height', height);
 
         // resize the map
-        map.select('.land').attr('d', path);
-        map.selectAll('.state').attr('d', path);
+        map.selectAll('.country').attr('d', path);
+        map.selectAll('.border').attr('d', path);
+        map.selectAll('.ghost-border').attr('d', path);
+        map.selectAll(".country-label")
+          .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; });
     }
 
     </script>

@@ -31,7 +31,9 @@ build/cities.json: build/ne_10m_populated_places.shp
 																				AND FEATURECLA = 'Admin-0 Capital'" $@ $<
 
 build/caribe.json: build/countries.json build/cities.json
-	topojson -o $@ --id-property ADM0_A3 --properties name=NAME_LONG -- $^
+	topojson -o $@ --id-property 'ADM0_A3,country' \
+	--external-properties localdata/caribe_official.tsv \
+	--properties name=NAME_LONG -- $^
 
 public/caribe.json: build/caribe.json
 	cp $< $@
