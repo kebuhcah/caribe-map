@@ -144,8 +144,9 @@
 
       bubble.append("text")
         .attr("transform", function(d) {
-           return "translate(" + (path.centroid(d)[0] - (radius(d.properties.consumptionKbd) || 0)/1.4 - 5)
-              + "," + (path.centroid(d)[1] - (radius(d.properties.consumptionKbd) || 0)/1.4 - 5) + ")";
+           return "translate(" + (path.centroid(d)[0])
+              + "," + (path.centroid(d)[1] - (radius(d.properties.consumptionKbd) || 0)
+              - (d.id !== 'VEN' ? 6 : 12)) + ")";
          })
         .attr("dy", ".35em")
         .attr("font-size", 12)
@@ -154,8 +155,9 @@
         .text(function(d) { return d.properties.consumptionKbd + " KB/D"; });
       bubble.append("text")
         .attr("transform", function(d) {
-           return "translate(" + (path.centroid(d)[0] + ((radius(d.properties.quotaKbd)/1.4)||5) + 5)
-              + "," + (path.centroid(d)[1] + ((radius(d.properties.quotaKbd)/1.4)||5) + 5) + ")";
+           return "translate(" + (path.centroid(d)[0])
+              + "," + (path.centroid(d)[1] + ((radius(d.properties.quotaKbd))||0)
+              + (d.id !== 'GUY' ? 6 : 12)) + ")";
          })
         .attr("dy", ".35em")
         .attr("font-size", 12)
