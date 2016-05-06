@@ -142,7 +142,8 @@
             .style("stroke-width", "1px")
             .style("pointer-events", "all")
             .on("mouseover", mouseover)
-            .on("mouseout",  mouseout);
+            .on("mouseout", mouseout)
+            .on("click", click);
 
         d3.select(window).on('resize', resize);
 
@@ -192,7 +193,9 @@
       d3.selectAll("."+d.point.id).classed("highlighted",false);
     }
 
-
+    function click(d,i) {
+      mouseout(d,i);
+    }
 
     //////////////////////////////////////////////////////////////
     //////////////////////// Auto Resize /////////////////////////
