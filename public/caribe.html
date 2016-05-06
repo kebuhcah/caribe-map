@@ -43,10 +43,10 @@
     		.attr("width", width)
         .attr("height", height)
 				.attr("class", "root");
-        var hiddenCountries = ['COL', 'BRA', 'PRI', 'FRA', 'MEX', 'BRB', 'SLV',
-    		                       'USA', 'ECU', 'PER', 'PAN', 'CRI', 'TTO'];
 
-		function isHiddenCountry(c) {
+    var hiddenCountries = ['COL', 'BRA', 'PRI', 'FRA', 'MEX', 'BRB', 'SLV',
+		                       'USA', 'ECU', 'PER', 'PAN', 'CRI', 'TTO'];
+    function isHiddenCountry(c) {
 			return hiddenCountries.indexOf(c) >= 0;
 		}
 
@@ -61,6 +61,11 @@
     var radius = d3.scale.sqrt()
       .domain([0, 200])
       .range([0, 60]);
+
+    var voronoi = d3.geom.voronoi()
+      .x(function(d) { return path.centroid(d)[0]; })
+      .y(function(d) { return path.centroid(d)[1]; })
+      .clipExtent([[0, 0], [width, height]]);
 
   	d3.json("caribe.json", function(error, caribe) {
       if (error) return console.error(error);
@@ -89,7 +94,7 @@
 							|| a !== b && isHiddenCountry(a.id) && isHiddenCountry(b.id);
 					}))
 					.attr("d", path)
-					.attr("class", "ghost-border");
+					.attr("class", "border ghost");
 
       var bubble = svg.append("g")
         .attr("class", "bubble")
@@ -100,16 +105,16 @@
       bubble.append("circle")
         .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; })
         .attr("r", function(d) { return radius(d.properties.quotaKbd); })
-        .attr("class","quota");
+        .attr("class", function(d){ return "quota " + d.id; });
       bubble.append("circle")
         .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; })
         .attr("r", function(d) { return radius(d.properties.consumptionKbd); })
-        .attr("class","consumption");
+        .attr("class", function(d){ return "consumption " + d.id; });
 
-		svg.selectAll(".country-label")
-				.data(countries.features.filter(function(d) {
-          return !isHiddenCountry(d.id);
-        }))
+  		svg.selectAll(".country-label")
+  				.data(countries.features.filter(function(d) {
+            return !isHiddenCountry(d.id);
+          }))
 			.enter().append("text")
 				.attr("class", function(d) { return "country-label " + d.id; })
 				.attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; })
@@ -120,38 +125,78 @@
 					return ['KNA', 'VCT', 'DMA'].indexOf(d.id) >= 0 ? "end" :
 								['ATG', 'DOM', 'BLZ', 'LCA', 'GRD'].indexOf(d.id) >= 0 ? "start" : "middle";
 				});
+
+        //Initiate a group element to place the voronoi diagram in
+        var voronoiGroup = svg.append("g")
+          .attr("class", "voronoiWrapper");
+        console.log(countries.features);
+        voronoiGroup.selectAll("path")
+            .data(voronoi(countries.features.filter(function(d) {
+              return !isHiddenCountry(d.id);
+            }))) //Use vononoi() with your dataset inside
+          .enter().append("path")
+            .attr("d", function(d, i) { console.log(d);return "M" + d.join("L") + "Z"; })
+          .attr("class", function(d,i) { return "voronoi " + d.id; }) //Give each cell a unique class where the unique part corresponds to the circle classes
+            //.style("stroke", "#2074A0") //I use this to look at how the cells are dispersed as a check
+            .style("fill", "none")
+            .style("stroke-width", "1px")
+            .style("pointer-events", "all")
+            .on("mouseover", mouseover)
+            .on("mouseout",  mouseout);
+
+        d3.select(window).on('resize', resize);
+
+        function resize() {
+            // adjust things when the window size changes
+            width = parseInt(d3.select('#map').style('width'));
+            width = width - margin.left - margin.right;
+            height = width * mapRatio;
+
+            // update projection
+            projection
+                .translate([width / 2, height / 2])
+                .scale(width * 4 / 3);
+
+            // resize the map container
+            svg.attr('width', width).attr('height', height);
+
+            // resize the map
+            svg.selectAll('.country').attr('d', path);
+            svg.selectAll('.border').attr('d', path);
+            svg.selectAll(".country-label")
+              .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; });
+            svg.selectAll(".quota")
+              .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; });
+            svg.selectAll(".consumption")
+              .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; });
+
+            voronoi
+              .x(function(d) { return path.centroid(d)[0]; })
+              .y(function(d) { return path.centroid(d)[1]; })
+              .clipExtent([[0, 0], [width, height]]);
+
+              svg.selectAll(".voronoi")
+                  .data(voronoi(countries.features.filter(function(d) {
+                    return !isHiddenCountry(d.id);
+                  })))
+                  .attr("d", function(d, i) { console.log(d);return "M" + d.join("L") + "Z"; });
+
+        }
 		});
 
-    d3.select(window).on('resize', resize);
-
-    function resize() {
-        // adjust things when the window size changes
-        width = parseInt(d3.select('#map').style('width'));
-        width = width - margin.left - margin.right;
-        height = width * mapRatio;
-
-        // update projection
-        projection
-            .translate([width / 2, height / 2])
-            .scale(width * 4 / 3);
-
-        // resize the map container
-        var map = d3.select('#map svg');
-        map
-            .attr('width', width)
-            .attr('height', height);
-
-        // resize the map
-        map.selectAll('.country').attr('d', path);
-        map.selectAll('.border').attr('d', path);
-        map.selectAll('.ghost-border').attr('d', path);
-        map.selectAll(".country-label")
-          .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; });
-        map.selectAll(".quota")
-          .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; });
-        map.selectAll(".consumption")
-          .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; });
+    function mouseover(d,i) {
+      d3.selectAll("."+d.point.id).classed("highlighted",true);
     }
+
+    function mouseout(d,i) {
+      d3.selectAll("."+d.point.id).classed("highlighted",false);
+    }
+
+
+
+    //////////////////////////////////////////////////////////////
+    //////////////////////// Auto Resize /////////////////////////
+    //////////////////////////////////////////////////////////////
 
     </script>
 </body>

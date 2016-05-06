@@ -6,6 +6,10 @@
   fill: #F66;
 }
 
+.country.highlighted {
+  fill: #008000;
+}
+
 .country.ghost {
   fill: #CCC;
   fill-opacity: 0.3;
@@ -18,13 +22,14 @@
   stroke-linejoin: round;
 }
 
-.ghost-border {
-  stroke: #FFF;
-  stroke-width: 1;
-  fill: none;
-  stroke-linejoin: round;
+.border.ghost {
   stroke-dasharray: 2,2;
 }
+
+.border.highlighted {
+  stroke: #f00;
+}
+
 .city {
   stroke: #080;
   stroke-width: 2;
@@ -40,7 +45,7 @@
 }
 
 .quota {
-  fill-opacity: .5;
+  fill-opacity: .4;
   stroke: #000;
   stroke-width: .5px;
 }
@@ -49,4 +54,15 @@
   fill: none;
   stroke: #000;
   stroke-width: 1px;
+}
+
+.quota.highlighted {
+  fill-opacity: .8;
+  stroke: none;
+  fill: #ffd700;
+}
+
+.consumption.highlighted {
+  stroke: #ffd700;
+  stroke-width: 3px;
 }
