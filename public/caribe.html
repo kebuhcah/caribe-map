@@ -49,8 +49,8 @@
         .attr("height", height)
 				.attr("class", "root");
 
-    var hiddenCountries = ['COL', 'BRA', 'PRI', 'FRA', 'MEX', 'BRB', 'SLV',
-		                       'USA', 'ECU', 'PER', 'PAN', 'CRI', 'TTO'];
+    var hiddenCountries = ['COL', 'BRA', 'PRI', 'FRA', 'MEX', 'BRB',
+		                       'USA', 'ECU', 'PER', 'PAN', 'CRI', 'TTO', 'LCA', 'BHS'];
     function isHiddenCountry(c) {
 			return hiddenCountries.indexOf(c) >= 0;
 		}
@@ -172,7 +172,7 @@
         .attr("class", function(d){ return "consumption-label specific " + d.id; })
         .style("text-anchor", function(d) {
           return ['DOM', 'VEN', 'GUY', 'SUR', 'JAM'].indexOf(d.id) >= 0 ? "middle" :
-                 ['HND', 'NIC'].indexOf(d.id) >= 0 ? "start" : "end";
+                 ['HND', 'NIC', 'SLV'].indexOf(d.id) >= 0 ? "start" : "end";
         })
         .text(function(d) { return d.properties.consumptionKbd + " KB/D"; });
       bubble.append("text")
@@ -185,7 +185,7 @@
         .attr("font-size", 12)
         .attr("class", function(d){ return "quota-label specific " + d.id; })
         .style("text-anchor", function(d) {
-          return ['DOM', 'SUR'].indexOf(d.id) >= 0 ? "middle" :
+          return ['DOM', 'SUR', 'SLV'].indexOf(d.id) >= 0 ? "middle" :
                  ['GTM', 'CUB', 'JAM', 'HTI', 'GUY'].indexOf(d.id) < 0 ? "start" : "end";
         })
         .text(function(d) { return  d.properties.quotaKbd > 0 ? d.properties.quotaKbd + " KB/D" : ""; });
