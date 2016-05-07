@@ -10,16 +10,21 @@
 <body>
   <nav class="navbar navbar-default">
     <div class="container-fluid">
-      <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
-        <a class="navbar-brand" href="#">Petrocaribe: A Comedy of Errors</a>
+        <a class="navbar-brand" href="#">
+          <span class="glyphicon glyphicon-oil" aria-hidden="true"></span>
+          Petrocaribe: A Comedy of Errors
+        </a>
       </div>
     </div>
   </nav>
   <div class="row">
     <div class="col-sm-4">
       <div class="panel panel-default" id="content-panel">
-        <div class="panel-heading">Introduction</div>
+        <div class="panel-heading">
+          <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+          Introduction
+        </div>
         <div class="panel-body">
           <b>Petrocaribe</b> is an oil alliance of many Caribbean states with Venezuela to purchase oil on conditions of preferential payment. The alliance was launched on 29 June 2005 in Puerto La Cruz, Venezuela. In 2013 Petrocaribe agreed links with the Bolivarian Alliance for the Americas (ALBA), to go beyond oil and promote economic cooperation.
         </div>
@@ -27,7 +32,10 @@
     </div>
     <div class="col-sm-8">
       <div class="panel panel-default">
-        <div class="panel-heading">Petrocaribe Countries <small>(click each country for more details)</small></div>
+        <div class="panel-heading">
+          <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+          Petrocaribe Countries <small>(click each country for more details)</small>
+        </div>
         <div id="map">
         </div>
       </div>
@@ -173,7 +181,7 @@
         .attr("transform", function(d) {
            return "translate(" + (path.centroid(d)[0])
               + "," + (path.centroid(d)[1] - (radius(d.properties.consumptionKbd) || 0)
-              - ('VEN' === d.id ? -10 : 'BLZ' !== d.id ? 8 : 12)) + ")";
+              - ('VEN' === d.id ? -10 : 'BLZ' !== d.id ? 7 : 12)) + ")";
          })
         .attr("dy", ".35em")
         .attr("font-size", 12)
