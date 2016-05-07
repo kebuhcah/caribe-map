@@ -31,6 +31,7 @@
   </div>
   <script src="lib/d3.v3.min.js" charset="utf-8"></script>
   <script src="lib/topojson.v1.min.js"></script>
+  <script src="lib/jquery.min.js"></script>
   <script src="lib/bootstrap.min.js" charset="utf-8"></script>
   <script type="text/javascript">
     var margin = {top: 0, left: 0, bottom: 0, right: 0}
@@ -160,11 +161,11 @@
         .attr("transform", function(d) {
            return "translate(" + (path.centroid(d)[0])
               + "," + (path.centroid(d)[1] - (radius(d.properties.consumptionKbd) || 0)
-              - (['BLZ', 'VEN'].indexOf(d.id) < 0 ? 8 : 12)) + ")";
+              - ('VEN' === d.id ? -10 : 'BLZ' !== d.id ? 8 : 12)) + ")";
          })
         .attr("dy", ".35em")
         .attr("font-size", 12)
-        .attr("class", function(d){ return "consumption-label " + d.id; })
+        .attr("class", function(d){ return "consumption-label specific " + d.id; })
         .style("text-anchor", function(d) {
           return ['DOM', 'VEN', 'GUY', 'SUR', 'JAM'].indexOf(d.id) >= 0 ? "middle" :
                  ['HND', 'NIC'].indexOf(d.id) >= 0 ? "start" : "end";
@@ -178,7 +179,7 @@
          })
         .attr("dy", ".35em")
         .attr("font-size", 12)
-        .attr("class", function(d){ return "quota-label " + d.id; })
+        .attr("class", function(d){ return "quota-label specific " + d.id; })
         .style("text-anchor", function(d) {
           return ['DOM', 'SUR'].indexOf(d.id) >= 0 ? "middle" :
                  ['GTM', 'CUB', 'JAM', 'HTI', 'GUY'].indexOf(d.id) < 0 ? "start" : "end";
@@ -242,16 +243,18 @@
                   .attr("d", function(d, i) { return "M" + d.join("L") + "Z"; });
 
               svg.select(".legend").attr("transform", "translate(" + (width - 75) + "," + 15 + ")");
-              svg.selectAll(".consumption-label")
-                  .attr("transform", function(d) {
-                     return "translate(" + (path.centroid(d)[0] - (radius(d.properties.consumptionKbd) || 0)/1.4 - 5)
-                        + "," + (path.centroid(d)[1] - (radius(d.properties.consumptionKbd) || 0)/1.4 - 5) + ")";
-                   });
-               svg.selectAll(".quota-label")
-                   .attr("transform", function(d) {
-                      return "translate(" + (path.centroid(d)[0] + ((radius(d.properties.quotaKbd)/1.4)||5) + 5)
-                         + "," + (path.centroid(d)[1] + ((radius(d.properties.quotaKbd)/1.4)||5) + 5) + ")";
-                    });
+              svg.selectAll(".consumption-label.specific")
+                .attr("transform", function(d) {
+                   return "translate(" + (path.centroid(d)[0])
+                      + "," + (path.centroid(d)[1] - (radius(d.properties.consumptionKbd) || 0)
+                      - ('VEN' === d.id ? -10 : 'BLZ' !== d.id ? 8 : 12)) + ")";
+                 })
+               svg.selectAll(".quota-label.specific")
+                 .attr("transform", function(d) {
+                    return "translate(" + (path.centroid(d)[0])
+                       + "," + (path.centroid(d)[1] + ((radius(d.properties.quotaKbd))||0)
+                       + (d.id !== 'GUY' ? 8 : 12)) + ")";
+                  })
         }
 		});
 
