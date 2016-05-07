@@ -63,6 +63,10 @@
   font-weight: bold;
 }
 
+.quota-label.highlighted .note {
+  fill: #ccc;
+}
+
 .root {
   stroke-width: 0px;
   background-color: #cff;

@@ -94,12 +94,16 @@
         .attr("class", "consumption-label")
         .style("text-anchor","middle")
         .text("Total Consumption");
-    legend150.append("text")
+    var quotaLegend = legend150.append("text")
         .attr("y", function(d) { return 2 * radius(d) - 5; })
         .attr("dy", "1.3em")
         .attr("class", "quota-label")
-        .style("text-anchor","middle")
-        .text("Petrocaribe Quota");
+        .style("text-anchor","middle");
+      quotaLegend.append("tspan").attr("x",0).attr("dy","1.3em").text("Petrocaribe Quota");
+      quotaLegend.append("tspan")
+        .attr("x",0).attr("dy","1.3em")
+        .classed("note", true)
+        .text("(1000 barrels/day)");
 
   	d3.json("caribe.json", function(error, caribe) {
       if (error) return console.error(error);
@@ -192,7 +196,8 @@
           return ['DOM', 'SUR', 'SLV'].indexOf(d.id) >= 0 ? "middle" :
                  ['GTM', 'CUB', 'JAM', 'HTI', 'GUY'].indexOf(d.id) < 0 ? "start" : "end";
         })
-        .text(function(d) { return  d.properties.quotaKbd > 0 ? d.properties.quotaKbd + " KB/D" : ""; });
+        .text(function(d) { return  d.properties.quotaKbd > 0 ?
+          (d.properties.quotaKbd + " KB/D" + (d.id === 'CUB' ? "*" : "")) : ""; });
 
 
         //Initiate a group element to place the voronoi diagram in
@@ -211,7 +216,8 @@
             .style("pointer-events", "all")
             .on("mouseover", mouseover)
             .on("mouseout", mouseout)
-            .on("touchstart", touchstart);
+            .on("touchstart", touchstart)
+            .on("click", click);
 
         d3.select(window).on('resize', resize);
 
@@ -278,11 +284,11 @@
 
     function touchstart(d,i) {
       d3.selectAll(".highlighted").classed("highlighted",false);
-      mouseover(d,i);
+      click(d,i);
     }
 
     function click(d,i) {
-      touchstart(d,i);
+      alert("TODO: Update view w/ details for: " + d.point.properties.name);
     }
 
     //////////////////////////////////////////////////////////////
