@@ -18,7 +18,7 @@
   </nav>
   <div class="row">
     <div class="col-md-4">
-      <div class="panel panel-default">
+      <div class="panel panel-default" id="content-panel">
         <div class="panel-heading">Introduction</div>
         <div class="panel-body">
           <b>Petrocaribe</b> is an oil alliance of many Caribbean states with Venezuela to purchase oil on conditions of preferential payment. The alliance was launched on 29 June 2005 in Puerto La Cruz, Venezuela. In 2013 Petrocaribe agreed links with the Bolivarian Alliance for the Americas (ALBA), to go beyond oil and promote economic cooperation.
@@ -288,7 +288,10 @@
     }
 
     function click(d,i) {
-      alert("TODO: Update view w/ details for: " + d.point.properties.name);
+      var properties = d.point.properties;
+      d3.select("#content-panel .panel-heading").text(properties.name);
+      d3.select("#content-panel .panel-body").text("Products: " + properties.products);
+      //alert("TODO: Update view w/ details for: " + d.point.properties.name);
     }
 
     //////////////////////////////////////////////////////////////

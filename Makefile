@@ -15,7 +15,7 @@ build/countries.json: build/ne_50m_admin_0_countries.shp
 																				 'VEN', 'COL', 'BRA', 'USA', 'MEX', \
 																				 'PRI', 'FRA', 'PER', 'ECU')" $@ $<
 
-localdata/caribe_official.tsv:
+localdata/caribe_official.tsv: localdata/convert.q
 	q localdata/convert.q
 
 build/caribe.json: build/countries.json localdata/caribe_official.tsv
@@ -23,6 +23,7 @@ build/caribe.json: build/countries.json localdata/caribe_official.tsv
 	--external-properties localdata/caribe_official.tsv \
 	--properties quotaKbd=+quotaKbd \
 	--properties consumptionKbd=+consumptionKbd \
+	--properties products=products \
 	--properties name=name_long -- $<
 
 public/caribe.json: build/caribe.json
