@@ -40,7 +40,8 @@
   fill: none;
 }
 
-.country-label {
+.country-label.highlighted {
+  font-weight: bold;
 }
 
 .consumption-label {
