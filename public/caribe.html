@@ -24,7 +24,7 @@
         <div class="panel-heading">
           <h3 class="panel-title">
             <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-            Introduction
+            <span class="content-title">Introduction</span>
           </h3>
         </div>
         <div class="panel-body">
@@ -33,9 +33,9 @@
             <li><a href="#">Library</a></li>
             <li class="active">Data</li>
           </ol>
-          <p>
+          <div class="panel-content">
             <b>Petrocaribe</b> is an oil alliance of many Caribbean states with Venezuela to purchase oil on conditions of preferential payment. The alliance was launched on 29 June 2005 in Puerto La Cruz, Venezuela. In 2013 Petrocaribe agreed links with the Bolivarian Alliance for the Americas (ALBA), to go beyond oil and promote economic cooperation.
-          </p>
+          </div>
         </div>
       </div>
     </div>
@@ -61,7 +61,7 @@
     var margin = {top: 0, left: 0, bottom: 0, right: 0}
       , width = parseInt(d3.select('#map').style('width'))
       , width = width - margin.left - margin.right
-      , mapRatio = .7
+      , mapRatio = .65
       , height = width * mapRatio;
 
     var svg = d3.select("#map").append("svg")
@@ -307,11 +307,15 @@
     function mousedown(d,i) {
       d3.selectAll(".quota."+d.point.id).classed("mousedown",true);
       d3.selectAll(".consumption."+d.point.id).classed("mousedown",true);
+      d3.select("#content-panel").classed("panel-info",false);
+      d3.select("#content-panel").classed("panel-warning",true);
+      d3.select("#content-panel").classed({"panel-info": false, "panel-warning": true});
     }
 
     function mouseup(d,i) {
       d3.selectAll(".quota."+d.point.id).classed("mousedown",false);
       d3.selectAll(".consumption."+d.point.id).classed("mousedown",false);
+      d3.select("#content-panel").classed({"panel-info": true, "panel-warning": false});
     }
 
     function touchstart(d,i) {
@@ -321,8 +325,8 @@
 
     function click(d,i) {
       var properties = d.point.properties;
-      d3.select("#content-panel .panel-heading").text(properties.name);
-      d3.select("#content-panel .panel-body").text("Products: " + properties.products);
+      d3.select("#content-panel .content-title").text(properties.name);
+      d3.select("#content-panel .panel-content").text("Products: " + properties.products);
     }
 
     //////////////////////////////////////////////////////////////
