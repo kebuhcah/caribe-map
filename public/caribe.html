@@ -8,7 +8,7 @@
   <title>Petrocaribe</title
 </head>
 <body>
-  <nav class="navbar navbar-default">
+  <header class="navbar navbar-default">
     <div class="container-fluid">
       <div class="navbar-header">
         <a class="navbar-brand" href="#">
@@ -17,27 +17,39 @@
         </a>
       </div>
     </div>
-  </nav>
+  </header>
   <div class="row">
     <div class="col-sm-4">
-      <div class="panel panel-default" id="content-panel">
+      <div class="panel panel-info" id="content-panel">
         <div class="panel-heading">
-          <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-          Introduction
+          <h3 class="panel-title">
+            <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+            Introduction
+          </h3>
         </div>
         <div class="panel-body">
-          <b>Petrocaribe</b> is an oil alliance of many Caribbean states with Venezuela to purchase oil on conditions of preferential payment. The alliance was launched on 29 June 2005 in Puerto La Cruz, Venezuela. In 2013 Petrocaribe agreed links with the Bolivarian Alliance for the Americas (ALBA), to go beyond oil and promote economic cooperation.
+          <ol class="breadcrumb">
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Library</a></li>
+            <li class="active">Data</li>
+          </ol>
+          <p>
+            <b>Petrocaribe</b> is an oil alliance of many Caribbean states with Venezuela to purchase oil on conditions of preferential payment. The alliance was launched on 29 June 2005 in Puerto La Cruz, Venezuela. In 2013 Petrocaribe agreed links with the Bolivarian Alliance for the Americas (ALBA), to go beyond oil and promote economic cooperation.
+          </p>
         </div>
       </div>
     </div>
     <div class="col-sm-8">
-      <div class="panel panel-default">
+      <div class="panel panel-info">
         <div class="panel-heading">
-          <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
-          Petrocaribe Countries <small>(click each country for more details)</small>
+          <h3 class="panel-title">
+            <span class="glyphicon glyphicon-map-marker" aria-hidden="true"></span>
+            Petrocaribe Countries <small>(click each country for more details)</small>
+          </h3>
         </div>
         <div id="map">
         </div>
+        <div class="panel-footer">Sources: Petrocaribe, SELA, and IndexMundi</div>
       </div>
     </div>
   </div>
@@ -217,7 +229,7 @@
             }))) //Use vononoi() with your dataset inside
           .enter().append("path")
             .attr("d", function(d, i) { return "M" + d.join("L") + "Z"; })
-          .attr("class", function(d,i) { return "voronoi " + d.id; }) //Give each cell a unique class where the unique part corresponds to the circle classes
+          .attr("class", function(d,i) { return "voronoi " + d.id; })
             //.style("stroke", "#2074A0") //I use this to look at how the cells are dispersed as a check
             .style("fill", "none")
             .style("stroke-width", "1px")
@@ -319,3 +331,4 @@
 
     </script>
 </body>
+`
