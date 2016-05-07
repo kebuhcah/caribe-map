@@ -89,9 +89,17 @@
   fill: #f66;
 }
 
+.quota.highlighted.mousedown {
+  fill: #ffd700;
+}
+
 .consumption.highlighted {
   stroke: #00f;
   stroke-width: 3px;
+}
+
+.consumption.highlighted.mousedown {
+  stroke-width: 5px;
 }
 
 .legend circle {
