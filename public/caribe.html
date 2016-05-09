@@ -81,7 +81,10 @@
           </table>
         </span>
         <div class="panel-body hidden" id="info-country-lede">
-          content goes here
+          <div class="content">content goes here</div>
+          <button type="button" class="btn btn-default btn-md" data-toggle="modal" data-target="#myModal">
+            Read more...
+          </button>
         </div>
       </div>
     </div>
@@ -93,15 +96,28 @@
             Petrocaribe Countries <small>(click each country for more details)</small>
           </h3>
         </div>
-        <!--<table class="table table-striped table-condensed">
-          <tr><td>hmm</td></tr>
-        </table>-->
         <div id="map">
         </div>
         <div class="panel-footer">Sources: Petrocaribe, SELA, and IndexMundi</div>
       </div>
     </div>
   </div>
+  <div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title">Modal title</h4>
+        </div>
+        <div class="modal-body">
+          <p>One fine body&hellip;</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
   <script src="lib/d3.v3.min.js" charset="utf-8"></script>
   <script src="lib/topojson.v1.min.js"></script>
   <script src="lib/jquery.min.js"></script>
@@ -379,6 +395,7 @@
 
       // populate content
       d3.select("#info-data-country td").text(properties.name);
+      d3.select("#myModal .modal-title").text(properties.name);
       d3.select("#info-data-consumption td").text((properties.consumptionKbd + " thousand barrels/day") || "N/A");
       d3.select("#info-data-quota td").text(properties.quotaKbd ? (properties.quotaKbd + " thousand barrels/day") : "N/A");
       d3.select("#info-data-actual td").text(!properties.quotaKbd ? "N/A" : properties.actualKbd ? (properties.actualKbd + " thousand barrels/day") : "none");
@@ -390,14 +407,22 @@
       d3.select("#info-data-joint td").text(properties.jointVentures || "N/A");
 
       d3.html("content/"+ d.point.id + ".html", function(error,content) {
-        if (error) console.error(error);
+        if (error) {
+          console.error(error);
+          d3.select("#info-country-lede button").classed("hidden", true);
+        } else {
+          d3.select("#info-country-lede button").classed("hidden", false);
+        }
 
-        d3.select("#info-country-lede").html(error ?
+        d3.select("#info-country-lede .content").html(error ?
           "<p>No content can be found for: " + properties.name + "</p>" :
           d3.select(content).select(".lede").html());
 
-        d3.select("#info-country-lede").classed("hidden", false);
-        d3.select("#info-data-container").classed("hidden", true);
+        g_content = content;
+
+        d3.select("#myModal .modal-body").html(error ?
+          "<p>WTH?</p>" :
+          d3.select(content).select(".full-story").html());
 
         console.log(content);
 
