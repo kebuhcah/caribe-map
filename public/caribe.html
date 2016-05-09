@@ -420,9 +420,13 @@
 
         g_content = content;
 
-        d3.select("#myModal .modal-body").html(error ?
-          "<p>WTH?</p>" :
-          d3.select(content).select(".full-story").html());
+        if(d3.select(content).select(".full-story").empty()) {
+          d3.select("#info-country-lede button").classed("hidden", true);
+        } else {
+          d3.select("#myModal .modal-body").html(error ?
+            "<p>WTH?</p>" :
+            d3.select(content).select(".full-story").html());
+        }
 
         console.log(content);
 
