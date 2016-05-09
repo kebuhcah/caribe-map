@@ -30,7 +30,7 @@
         </div>
         <ol class="breadcrumb">
           <li class="intro-link active"><a href="#" class="inactivelink">Intro</a></li>
-          <li class="country-name hidden">(Country)</li>
+          <li class="country-name hidden"><a href="#">(Country)</a></li>
           <li class="data-link hidden"><a href="#">Data</a></li>
         </ol>
         <div class="panel-body" id="info-intro-content">
@@ -80,8 +80,8 @@
             </tr>
           </table>
         </span>
-        <div class="panel-body" id="info-country-lede" style="display: none">
-          WHAT
+        <div class="panel-body hidden" id="info-country-lede">
+          content goes here
         </div>
       </div>
     </div>
@@ -374,13 +374,8 @@
 
     function click(d,i) {
       var properties = d.point.properties;
-      // show/hide content
-      d3.select("#info-intro-content").classed("hidden", true);
-      d3.select("#info-data-container").classed("hidden", false);
-      d3.select(".intro-link a").classed("inactivelink", false);
-      d3.select(".intro-link").classed("active", false);
-      d3.select(".country-name").text(properties.name).classed("hidden", false);
-      d3.select(".data-link").classed("hidden", false);
+
+      d3.select(".country-name a").text(properties.name);
 
       // populate content
       d3.select("#info-data-country td").text(properties.name);
@@ -394,23 +389,68 @@
       d3.select("#info-data-alba td").text(properties.albaAlimentos || "N/A");
       d3.select("#info-data-joint td").text(properties.jointVentures || "N/A");
 
-      d3.select(".intro-link a").on("click", navigateToIntro);
+      d3.html("content/"+ d.point.id + ".html", function(error,content) {
+        if (error) console.error(error);
 
-      console.log(properties);
+        d3.select("#info-country-lede").html(error ?
+          "<p>No content can be found for: " + properties.name + "</p>" :
+          d3.select(content).select(".lede").html());
+
+        d3.select("#info-country-lede").classed("hidden", false);
+        d3.select("#info-data-container").classed("hidden", true);
+
+        console.log(content);
+
+        navigateToCountry();
+      });
     }
+
+    d3.select(".intro-link a").on("click", navigateToIntro);
+    d3.select(".country-name a").on("click", navigateToCountry);
+    d3.select(".data-link a").on("click", navigateToData);
 
     function navigateToIntro() {
       d3.select("#info-intro-content").classed("hidden", false);
       d3.select("#info-data-container").classed("hidden", true);
+      d3.select("#info-country-lede").classed("hidden", true);
 
       d3.select(".intro-link a").classed("inactivelink", true);
       d3.select(".intro-link").classed("active", true);
       d3.select(".country-name").classed("hidden", true);
       d3.select(".data-link").classed("hidden", true);
+    }
 
-      console.log("LOL");
+    function navigateToCountry() {
+      d3.select("#info-intro-content").classed("hidden", true);
+      d3.select("#info-data-container").classed("hidden", true);
+      d3.select("#info-country-lede").classed("hidden", false);
+
+      d3.select(".intro-link a").classed("inactivelink", false);
+      d3.select(".intro-link").classed("active", false);
+      d3.select(".country-name a").classed("inactivelink", true);
+      d3.select(".country-name").classed("active", true);
+      d3.select(".data-link a").classed("inactivelink", false);
+      d3.select(".data-link").classed("active", false);
+
+      d3.select(".country-name").classed("hidden", false);
+      d3.select(".data-link").classed("hidden", false);
+    }
+
+    function navigateToData() {
+      d3.select("#info-intro-content").classed("hidden", true);
+      d3.select("#info-data-container").classed("hidden", false);
+      d3.select("#info-country-lede").classed("hidden", true);
+
+      d3.select(".intro-link a").classed("inactivelink", false);
+      d3.select(".intro-link").classed("active", false);
+      d3.select(".country-name a").classed("inactivelink", false);
+      d3.select(".country-name").classed("active", false);
+      d3.select(".data-link a").classed("inactivelink", true);
+      d3.select(".data-link").classed("active", true);
+
+      d3.select(".country-name").classed("hidden", false);
+      d3.select(".data-link").classed("hidden", false);
     }
 
     </script>
 </body>
-`
