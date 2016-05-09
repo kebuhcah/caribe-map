@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
-<link rel="stylesheet" type="text/css" href="caribe.css"> </link>
+<link rel="stylesheet" type="text/css" href="caribe-svg.css"> </link>
+<link rel="stylesheet" type="text/css" href="caribe-html.css"> </link>
 <link rel="stylesheet" type="text/css" href="lib/bootstrap.min.css"> </link>
 <link rel="stylesheet" type="text/css" href="lib/bootstrap-theme.min.css"> </link>
 <link href="favicon.ico" rel="shortcut icon" type="image/x-icon" />
@@ -24,35 +25,62 @@
         <div class="panel-heading">
           <h3 class="panel-title">
             <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
-            <span class="content-title">Introduction</span>
+            <span class="content-title">Information</span>
           </h3>
         </div>
         <ol class="breadcrumb">
-          <li><a href="#">Home</a></li>
-          <li><a href="#">Library</a></li>
-          <li class="active">Data</li>
-          <li><a href="#">Lol</a></li>
+          <li class="intro-link active"><a href="#" class="inactivelink">Intro</a></li>
+          <li class="country-name hidden">(Country)</li>
+          <li class="data-link hidden"><a href="#">Data</a></li>
         </ol>
-        <table class="table table-striped table-condensed">
-          <tr>
-            <th>Country</th>
-            <td>Lol</td>
-          </tr>
-          <tr>
-            <th width="30%">Products</th>
-            <td>what</td>
-          </tr>
-          <tr>
-            <th>Number</th>
-            <td>6</td>
-          </tr>
-        </table>
-        <div class="panel-body">
-          <div class="panel-content">
+        <div class="panel-body" id="info-intro-content">
             <b>Petrocaribe</b> is an oil alliance of many Caribbean states with Venezuela to purchase oil on conditions of preferential payment. The alliance was launched on 29 June 2005 in Puerto La Cruz, Venezuela. In 2013 Petrocaribe agreed links with the Bolivarian Alliance for the Americas (ALBA), to go beyond oil and promote economic cooperation.
-          </div>
         </div>
-        <div class="panel-body">
+        <span id="info-data-container" class="hidden">
+          <table id="info-data-table" class="table table-striped table-condensed">
+            <tr id="info-data-country">
+              <th width="40%">Country</th>
+              <td></td>
+            </tr>
+            <tr id="info-data-joined-year">
+              <th>Joined in</th>
+              <td></td>
+            </tr>
+            <tr id="info-data-consumption">
+              <th>Total Consumption (Estimate)</th>
+              <td></td>
+            </tr>
+            <tr id="info-data-quota">
+              <th>Petrocaribe Quota</th>
+              <td></td>
+            </tr>
+            <tr id="info-data-actual">
+              <th>Actual Petrocaribe Shipments in 2015</th>
+              <td>LOL</td>
+            </tr>
+            <tr id="info-data-products">
+              <th>Products Supplied</th>
+              <td></td>
+            </tr>
+            <tr id="info-data-infra">
+              <th>Infrastructure Projects</th>
+              <td></td>
+            </tr>
+            <tr id="info-data-social">
+              <th>Social Projects</th>
+              <td></td>
+            </tr>
+            <tr id="info-data-alba">
+              <th>Alba Alimentos</th>
+              <td></td>
+            </tr>
+            <tr id="info-data-joint">
+              <th>Joint Ventures</th>
+              <td></td>
+            </tr>
+          </table>
+        </span>
+        <div class="panel-body" id="info-country-lede" style="display: none">
           WHAT
         </div>
       </div>
@@ -91,7 +119,7 @@
 				.attr("class", "root");
 
     var hiddenCountries = ['COL', 'BRA', 'PRI', 'FRA', 'MEX', 'BRB',
-		                       'USA', 'ECU', 'PER', 'PAN', 'CRI', 'TTO', 'LCA', 'BHS'];
+		                       'USA', 'ECU', 'PER', 'PAN', 'CRI', 'TTO'];
     function isHiddenCountry(c) {
 			return hiddenCountries.indexOf(c) >= 0;
 		}
@@ -346,13 +374,42 @@
 
     function click(d,i) {
       var properties = d.point.properties;
-      d3.select("#content-panel .content-title").text(properties.name);
-      d3.select("#content-panel .panel-content").html("Products: <b> " + properties.products + "</b>");
+      // show/hide content
+      d3.select("#info-intro-content").classed("hidden", true);
+      d3.select("#info-data-container").classed("hidden", false);
+      d3.select(".intro-link a").classed("inactivelink", false);
+      d3.select(".intro-link").classed("active", false);
+      d3.select(".country-name").text(properties.name).classed("hidden", false);
+      d3.select(".data-link").classed("hidden", false);
+
+      // populate content
+      d3.select("#info-data-country td").text(properties.name);
+      d3.select("#info-data-consumption td").text((properties.consumptionKbd + " thousand barrels/day") || "N/A");
+      d3.select("#info-data-quota td").text(properties.quotaKbd ? (properties.quotaKbd + " thousand barrels/day") : "N/A");
+      d3.select("#info-data-actual td").text(!properties.quotaKbd ? "N/A" : properties.actualKbd ? (properties.actualKbd + " thousand barrels/day") : "none");
+      d3.select("#info-data-products td").text(properties.products || "N/A");
+      d3.select("#info-data-joined-year td").text(properties.joinedYear || "N/A");
+      d3.select("#info-data-infra td").text(properties.infraProjects || "N/A");
+      d3.select("#info-data-social td").text(properties.socialProjects || "N/A");
+      d3.select("#info-data-alba td").text(properties.albaAlimentos || "N/A");
+      d3.select("#info-data-joint td").text(properties.jointVentures || "N/A");
+
+      d3.select(".intro-link a").on("click", navigateToIntro);
+
+      console.log(properties);
     }
 
-    //////////////////////////////////////////////////////////////
-    //////////////////////// Auto Resize /////////////////////////
-    //////////////////////////////////////////////////////////////
+    function navigateToIntro() {
+      d3.select("#info-intro-content").classed("hidden", false);
+      d3.select("#info-data-container").classed("hidden", true);
+
+      d3.select(".intro-link a").classed("inactivelink", true);
+      d3.select(".intro-link").classed("active", true);
+      d3.select(".country-name").classed("hidden", true);
+      d3.select(".data-link").classed("hidden", true);
+
+      console.log("LOL");
+    }
 
     </script>
 </body>

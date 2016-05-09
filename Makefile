@@ -23,7 +23,13 @@ build/caribe.json: build/countries.json localdata/caribe_official.tsv
 	--external-properties localdata/caribe_official.tsv \
 	--properties quotaKbd=+quotaKbd \
 	--properties consumptionKbd=+consumptionKbd \
+	--properties actualKbd=+actualKbd \
 	--properties products=products \
+	--properties infraProjects=infraProjects \
+	--properties socialProjects=socialProjects \
+	--properties albaAlimentos=albaAlimentos \
+	--properties jointVentures=jointVentures \
+	--properties joinedYear=joinedYear \
 	--properties name=name_long -- $<
 
 public/caribe.json: build/caribe.json
