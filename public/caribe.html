@@ -40,7 +40,7 @@
             Read more...
           </button>
         </div>
-        <span id="info-data-container" class="hidden">
+        <div id="info-data-container" class="hidden">
           <table id="info-data-table" class="table table-striped table-condensed">
             <tr id="info-data-country">
               <th width="40%">Country Name</th>
@@ -82,8 +82,16 @@
               <th>Joint Ventures</th>
               <td></td>
             </tr>
+            <tr>
+              <td></td>
+              <td>
+                <button type="button" class="btn btn-default btn-md">
+                  &larr;back
+                </button>
+              </td>
+            </tr>
           </table>
-        </span>
+        </div>
         <div class="panel-body hidden" id="info-country-lede">
           <div class="content">content goes here</div>
             <button type="button" class="btn btn-default btn-md" data-toggle="modal" data-target="#myModal">
@@ -465,6 +473,7 @@
     d3.select(".country-name a").on("click", navigateToCountry);
     d3.select(".data-link a").on("click", navigateToData);
     d3.select("#data-button").on("click", navigateToData);
+    d3.select("#info-data-container button").on("click", navigateToCountry);
 
     function navigateToIntro() {
       d3.select("#info-intro-content").classed("hidden", false);
